@@ -62,7 +62,7 @@ df['amax'] = df['sea_surface_height']
 
 # plot
 logger.debug("generating sources")
-source = bokeh.models.ColumnDataSource(data=df_years)
+source = bokeh.models.ColumnDataSource(data=df_days)
 source_raw = bokeh.models.ColumnDataSource(data=df)
 source_days = bokeh.models.ColumnDataSource(data=df_days)
 source_months = bokeh.models.ColumnDataSource(data=df_months)
@@ -78,22 +78,22 @@ p.yaxis.axis_label = 'sea_surface_height'
 p.x_range.name = 'time'
 p.y_range.name = 'sea_surface_height'
 
-# static
-# bokeh.plotting.output_file("delfzijl_line.html", title="delfzijl example")
-# df.to_json("delfzijl.json", orient="records")
 
 
 def change(attr, old, new):
-    date_range = (
-        datetime.datetime.fromtimestamp(p.x_range.end / 1000)
-        -
-        datetime.datetime.fromtimestamp(p.x_range.start / 1000)
-    )
-
+    t_end = datetime.datetime.fromtimestamp(p.x_range.end / 1000)
+    t_start = datetime.datetime.fromtimestamp(p.x_range.start / 1000)
+    date_range = (t_end - t_start)
     months = date_range.total_seconds() / (3600 * 24 * 30)
     if months < 1:
         logger.debug("switching to < 0.1 months ")
-        source.data.update(source_raw.data)
+        idx = np.logical_and(
+            df.index >= t_start,
+            df.index <= t_end
+        )
+        df_filtered = df.ix[idx]
+        source_filtered = bokeh.models.ColumnDataSource(data=df_filtered)
+        source.data.update(source_filtered.data)
     elif months < 10:
         logger.debug("switching to < 1 months ")
         source.data.update(source_days.data)
@@ -115,9 +115,12 @@ def periodic():
 # dynamic
 p.x_range.on_change("end", change)
 
-script, div = bokeh.embed.components(p)
-print(script)
-print(div)
+
+# static
+# bokeh.plotting.output_file("delfzijl_line.html", title="delfzijl example")
+# bokeh.plotting.show(p)
+# df.to_json("delfzijl.json", orient="records")
+
 
 curdoc = bokeh.plotting.curdoc()
 curdoc.add_root(p)
