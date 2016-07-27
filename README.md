@@ -1,6 +1,15 @@
 # timeseries
 Time series demo.
 
+# Prepare your computer
+- install anaconda
+- install bokeh
+- download data (go to data directory and in a bash shell execute `get.sh`)
+
+# Static example
+- go to the plot directory
+- call `bokeh html delfzijl.py`
+
 
 # Supported formats
 
