@@ -17,37 +17,37 @@ Time series demo.
 - static plot with dynamic data
 website -> wps request -> prepare data -> wps server calls `bokeh static` -> return div + script -> embed in html
 
-`loadPlot({
-    // get the div and script from the wps server
-    div: '<h2>plot for ijmuiden</h2>',
-    script: '<script>console.log("wps script loaded");</script>',
-    plotDiv: '#plot-wps-div',
-    plotScript: '#plot-wps-script'
-});
-`
+    loadPlot({
+        // get the div and script from the wps server
+        div: '<h2>plot for ijmuiden</h2>',
+        script: '<script>console.log("wps script loaded");</script>',
+        plotDiv: '#plot-wps-div',
+        plotScript: '#plot-wps-script'
+    });
+
 
 - static plot with static data
 prepare data -> generate `bokeh html` per site -> upload to webserver
 
 
-`loadPlot({
-    // create plots for each station
-    url: '/static/ijmuiden.html',
-    plotDiv: '#plot-static-div',
-    plotScript: '#plot-static-script'
-});
-`
+    loadPlot({
+        // create plots for each station
+        url: '/static/ijmuiden.html',
+        plotDiv: '#plot-static-div',
+        plotScript: '#plot-static-script'
+    });
+
 
 - dynamic plot with dynamic data
 website -> bokeh serve (with arguments for data connection) -> interactive plot (bound to live data, with possible LOD's)
 
-`loadPlot({
-    // plot for station is created on request
-    url: 'http://localhost:5007/plot?station=ijmuiden',
-    plotDiv: '#plot-div',
-    plotScript: '#plot-script'
-});
-`
+    loadPlot({
+        // plot for station is created on request
+        url: 'http://localhost:5007/plot?station=ijmuiden',
+        plotDiv: '#plot-div',
+        plotScript: '#plot-script'
+    });
+
 
 # Supported formats
 
